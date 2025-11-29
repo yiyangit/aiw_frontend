@@ -43,7 +43,7 @@ export default function LoginPage() {
       const result = await login(loginForm.username, loginForm.password);
 
       if (result.success) {
-        setSuccess('登录成功！正在跳转...');
+        setSuccess('登录成功喵！正在跳转...');
         setTimeout(() => {
           router.push('/');
         }, 1000);
@@ -51,7 +51,7 @@ export default function LoginPage() {
         setError(result.message);
       }
     } catch (err) {
-      setError('网络错误，请稍后重试');
+      setError('嘤嘤，网络错误，请稍后重试喵');
     } finally {
       setLoading(false);
     }
@@ -65,7 +65,7 @@ export default function LoginPage() {
 
     // 验证密码确认
     if (registerForm.password !== registerForm.confirmPassword) {
-      setError('两次输入的密码不一致');
+      setError('嘤嘤，两次输入的密码不一致');
       setLoading(false);
       return;
     }
@@ -75,17 +75,17 @@ export default function LoginPage() {
       const response = await authService.register(registerData);
 
       if (response.status === 'success') {
-        setSuccess('注册成功！请登录...');
+        setSuccess('注册成功喵！请登录...');
         setTimeout(() => {
           setIsLogin(true);
           setError('');
           setSuccess('');
         }, 1500);
       } else {
-        setError(response.message || '注册失败');
+        setError('嘤嘤，'+response.message || '注册失败');
       }
     } catch (err) {
-      setError('网络错误，请稍后重试');
+      setError('嘤嘤，网络错误，请稍后重试喵');
     } finally {
       setLoading(false);
     }
@@ -97,7 +97,7 @@ export default function LoginPage() {
     setSuccess('');
 
     // 游客模式：直接跳转主页，不执行登录
-    setSuccess('以游客身份继续...');
+    setSuccess('以游客身份继续喵...');
     setTimeout(() => {
       router.push('/');
     }, 1000);
@@ -122,7 +122,7 @@ export default function LoginPage() {
                 Aihara Workbooks
               </Header>
               <p style={{ color: 'rgba(255,255,255,0.9)', marginTop: '1rem' }}>
-                智能题库学习系统
+                {`Ciallo～(∠・ω< )⌒★`}
               </p>
             </div>
 
@@ -176,7 +176,7 @@ export default function LoginPage() {
                       fluid
                       icon="user"
                       iconPosition="left"
-                      placeholder="请输入用户名"
+                      placeholder="输入用户名"
                       value={loginForm.username}
                       onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
                       required
@@ -190,7 +190,7 @@ export default function LoginPage() {
                       icon="lock"
                       iconPosition="left"
                       type="password"
-                      placeholder="请输入密码"
+                      placeholder="输入密码"
                       value={loginForm.password}
                       onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                       required
@@ -222,7 +222,7 @@ export default function LoginPage() {
                       fluid
                       icon="user"
                       iconPosition="left"
-                      placeholder="请输入用户名（3-20个字符）"
+                      placeholder="用户名（3-20个字符）"
                       value={registerForm.username}
                       onChange={(e) => setRegisterForm({ ...registerForm, username: e.target.value })}
                       required
@@ -238,7 +238,7 @@ export default function LoginPage() {
                       icon="mail"
                       iconPosition="left"
                       type="email"
-                      placeholder="请输入邮箱地址"
+                      placeholder="邮箱地址"
                       value={registerForm.email}
                       onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
                       required
