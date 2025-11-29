@@ -93,13 +93,13 @@ export default function ChatInterface({ problemId }: ChatInterfaceProps) {
     <Segment style={{ height: '500px', display: 'flex', flexDirection: 'column' }}>
       <Header as="h4">
         <Icon name="chat" />
-        AI 答疑助手
+        AI 答疑
       </Header>
 
       <div style={{ flex: 1, overflowY: 'auto', marginBottom: '1rem', padding: '0.5rem' }}>
         {messages.length === 0 && !streamingContent && (
           <Message info>
-            <Message.Header>欢迎使用AI答疑助手</Message.Header>
+            <Message.Header>欢迎使用AI答疑喵！</Message.Header>
             <p>您可以就这道题目提出任何问题，我会为您详细解答。</p>
           </Message>
         )}
@@ -118,7 +118,7 @@ export default function ChatInterface({ problemId }: ChatInterfaceProps) {
         {streamingContent && (
           <div style={{ marginBottom: '1rem' }}>
             <div style={{ fontWeight: 'bold', color: '#1b5e20' }}>
-              AI助手：
+              bot：
             </div>
             <div style={{ marginTop: '0.5rem' }}>
               <MarkdownRenderer content={streamingContent} />

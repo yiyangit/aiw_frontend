@@ -31,7 +31,7 @@ export default function Home() {
             <Header.Content>
               <span>{`Ciallo～(∠・ω< )⌒★`}</span>
               <Header.Subheader>
-                更多功能敬请期待
+                更多功能敬请期待喵！
               </Header.Subheader>
             </Header.Content>
           </Header>
