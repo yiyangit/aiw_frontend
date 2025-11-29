@@ -312,11 +312,8 @@ export default function LoginPage() {
                     padding: '0.8rem'
                   }}
                 >
-                  <Icon name="user secret" /> 游客登录
+                游客登录
                 </Button>
-                <p style={{ color: '#888', fontSize: '0.9rem', marginTop: '1rem' }}>
-                  以游客身份浏览，无需登录即可体验基本功能
-                </p>
               </div>
             </Card.Content>
           </Card>

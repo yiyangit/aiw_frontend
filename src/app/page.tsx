@@ -28,11 +28,10 @@ export default function Home() {
 
         <Segment textAlign="center" style={{ padding: '4rem 2rem' }}>
           <Header as="h2" icon>
-            <Icon name="folder open" />
             <Header.Content>
-              欢迎使用习题集系统
+              <span>{`Ciallo～(∠・ω< )⌒★`}</span>
               <Header.Subheader>
-                通过分类和习题集管理您的学习内容
+                更多功能敬请期待
               </Header.Subheader>
             </Header.Content>
           </Header>
