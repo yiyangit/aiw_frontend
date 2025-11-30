@@ -88,20 +88,38 @@ export async function uploadImage(data: {
     });
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/v1/admin/upload`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-    body: formData,
-  });
+  // 创建带超时的 AbortController
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 125000); // 125秒超时
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || '上传失败');
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/v1/admin/upload`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || '上传失败');
+    }
+
+    return response.json();
+  } catch (err: any) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      throw new Error('请求超时：图片处理时间过长，请检查网络连接或尝试减少图片数量');
+    }
+    if (err.message.includes('CORS') || err.message.includes('Cross-Origin')) {
+      throw new Error('跨域请求被阻止：请检查服务器CORS配置');
+    }
+    throw err;
   }
-
-  return response.json();
 }
 
 // 批量上传图片（一个图片可能返回多个题目）
@@ -133,20 +151,38 @@ export async function uploadImageBatch(data: {
     });
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/v1/admin/upload`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-    body: formData,
-  });
+  // 创建带超时的 AbortController
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 125000); // 125秒超时
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || '上传失败');
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/v1/admin/upload`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || '上传失败');
+    }
+
+    return response.json();
+  } catch (err: any) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      throw new Error('请求超时：图片处理时间过长，请检查网络连接或尝试减少图片数量');
+    }
+    if (err.message.includes('CORS') || err.message.includes('Cross-Origin')) {
+      throw new Error('跨域请求被阻止：请检查服务器CORS配置');
+    }
+    throw err;
   }
-
-  return response.json();
 }
 
 // 批量上传多张图片并一次性处理
@@ -163,7 +199,7 @@ export async function uploadImagesBatch(data: {
     section: string;
     origin: string;
     difficulty: number;
-  }>;
+   }>;
   errors?: string[];
 }> {
   const token = getAuthToken();
@@ -184,20 +220,42 @@ export async function uploadImagesBatch(data: {
     });
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/v1/admin/upload/batch`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-    body: formData,
-  });
+  // 创建带超时的 AbortController
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 125000); // 125秒超时，给后端处理留出缓冲
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || '批量上传失败');
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/v1/admin/upload/batch`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+      signal: controller.signal, // 关联超时控制
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const error = await response.json();
+      // 提供更详细的错误信息
+      const errorMsg = error.error || `HTTP ${response.status}: ${response.statusText}`;
+      throw new Error(`批量上传失败: ${errorMsg}`);
+    }
+
+    return response.json();
+  } catch (err: any) {
+    clearTimeout(timeoutId);
+    // 区分超时错误和其他错误
+    if (err.name === 'AbortError') {
+      throw new Error('请求超时：图片处理时间过长，请检查网络连接或尝试减少图片数量');
+    }
+    // 区分真正的CORS错误
+    if (err.message.includes('CORS') || err.message.includes('Cross-Origin')) {
+      throw new Error('跨域请求被阻止：请检查服务器CORS配置');
+    }
+    throw err;
   }
-
-  return response.json();
 }
 
 // ================== 分类相关API ==================
