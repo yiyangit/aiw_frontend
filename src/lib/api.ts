@@ -90,7 +90,7 @@ export async function uploadImage(data: {
 
   // 创建带超时的 AbortController
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 125000); // 125秒超时
+  const timeoutId = setTimeout(() => controller.abort(), 310000); // 增加超时时间到310秒
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/v1/admin/upload`, {
@@ -153,7 +153,7 @@ export async function uploadImageBatch(data: {
 
   // 创建带超时的 AbortController
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 125000); // 125秒超时
+  const timeoutId = setTimeout(() => controller.abort(), 310000); // 增加超时时间到310秒
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/v1/admin/upload`, {
@@ -222,7 +222,7 @@ export async function uploadImagesBatch(data: {
 
   // 创建带超时的 AbortController
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 125000); // 125秒超时，给后端处理留出缓冲
+  const timeoutId = setTimeout(() => controller.abort(), 310000); // 增加超时时间到310秒，支持GLM API处理
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/v1/admin/upload/batch`, {
