@@ -410,6 +410,7 @@ export default function AdminPage() {
               <Icon name="chart bar" />
               <Header.Content>
                 概览
+                <Header.Subheader>系统核心数据统计</Header.Subheader>
               </Header.Content>
             </Header>
             {statsLoading ? (
@@ -418,12 +419,14 @@ export default function AdminPage() {
               <Statistic.Group widths="two">
                 <Statistic>
                   <Statistic.Value>
+                    <Icon name="users" />
                     {stats?.user_count}
                   </Statistic.Value>
                   <Statistic.Label>用户总数</Statistic.Label>
                 </Statistic>
                 <Statistic>
                   <Statistic.Value>
+                    <Icon name="file alternate" />
                     {stats?.problem_count}
                   </Statistic.Value>
                   <Statistic.Label>题目总数</Statistic.Label>
@@ -438,15 +441,8 @@ export default function AdminPage() {
       menuItem: '题目管理',
       render: () => (
         <Tab.Pane attached={false}>
-          {/* 图片上传 */}
+          <Header as="h3" style={{ marginTop: '1em' }}>上传题目</Header>
           <Segment>
-            <Header as="h3">
-              <Icon name="upload" />
-              <Header.Content>
-                上传题目
-                <Header.Subheader>上传题目图片并自动识别</Header.Subheader>
-              </Header.Content>
-            </Header>
             <Form onSubmit={handleUpload}>
               <Form.Group widths="equal">
                 <Form.Field>
@@ -501,122 +497,117 @@ export default function AdminPage() {
               />
             </Form>
           </Segment>
-          {/* 上传队列 */}
+
           {uploadQueue.length > 0 && (
-            <Segment>
-              <Header as="h3">
-                <Icon name="list ul" />
-                <Header.Content>
-                  上传队列 ({uploadQueue.length} 个文件)
-                  <Header.Subheader>
-                    待上传: {uploadQueue.filter(item => item.status === 'pending').length} |
-                    上传中: {uploadQueue.filter(item => item.status === 'uploading').length} |
-                    已完成: {uploadQueue.filter(item => item.status === 'completed').length} |
-                    失败: {uploadQueue.filter(item => item.status === 'error').length}
-                  </Header.Subheader>
-                </Header.Content>
-                <Button
-                  size="tiny"
-                  floated="right"
-                  onClick={clearCompleted}
-                  disabled={uploadQueue.filter(item => item.status === 'completed').length === 0}
-                >
-                  清除已完成
-                </Button>
-                <Button
-                  size="tiny"
-                  floated="right"
-                  onClick={clearAll}
-                >
-                  清空队列
-                </Button>
-              </Header>
-              <Card.Group itemsPerRow={1} stackable>
-                {uploadQueue.map((item) => (
-                  <Card key={item.id} color={
-                    item.status === 'completed' ? 'green' :
-                    item.status === 'error' ? 'red' :
-                    item.status === 'uploading' ? 'blue' : 'grey'
-                  }>
-                    <Card.Content>
-                      <Card.Header>
-                        <Icon name={
-                          item.status === 'completed' ? 'check circle' :
-                          item.status === 'error' ? 'times circle' :
-                          item.status === 'uploading' ? 'spinner' : 'clock'
-                        } />
-                        {item.file.name}
-                        {item.status === 'uploading' && <Icon loading name="spinner" />}
-                      </Card.Header>
-                      <Card.Meta>
-                        {(item.file.size / 1024).toFixed(1)} KB
-                      </Card.Meta>
-                      <Card.Description>
-                        {item.status === 'pending' && '等待上传...'}
-                        {item.status === 'uploading' && (
-                          <div>
-                            <Progress percent={item.progress} size="tiny" color="blue" />
-                            正在上传并处理...
-                          </div>
-                        )}
-                        {item.status === 'completed' && (
-                          <div>
-                            <Icon name="check" color="green" /> 上传成功！
-                            <br />
-                            共识别出 {item.results?.length || 0} 道题目
-                            {item.results && item.results.length > 0 && (
-                              <div style={{ marginTop: '0.5rem', fontSize: '0.85em' }}>
-                                题目ID: {item.results.map(r => r.id.substring(0, 8)).join(', ')}
-                              </div>
-                            )}
-                            {item.error && (
-                              <div style={{ marginTop: '0.5rem', color: 'orange', fontSize: '0.85em' }}>
-                                部分题目处理失败: {item.error}
-                              </div>
-                            )}
-                          </div>
-                        )}
-                        {item.status === 'error' && (
-                          <div>
-                            <Icon name="times" color="red" /> 上传失败
-                            <br />
-                            <span style={{ color: 'red', fontSize: '0.9em' }}>
-                              {item.error}
-                            </span>
-                          </div>
-                        )}
-                      </Card.Description>
-                    </Card.Content>
-                    <Card.Content extra>
-                      <div className="ui two buttons">
-                        {item.status === 'error' && (
-                          <Button basic color="green" onClick={() => retryUpload(item.id)}>
-                            重试
-                          </Button>
-                        )}
-                        {(item.status === 'pending' || item.status === 'completed' || item.status === 'error') && (
-                          <Button basic color="red" onClick={() => removeFromQueue(item.id)}>
-                            移除
-                          </Button>
-                        )}
-                      </div>
-                    </Card.Content>
-                  </Card>
-                ))}
-              </Card.Group>
-            </Segment>
+            <>
+              <Header as="h3" style={{ marginTop: '2em' }}>上传队列</Header>
+              <Segment>
+                <Header as="h3">
+                  <Icon name="list ul" />
+                  <Header.Content>
+                    上传队列 ({uploadQueue.length} 个文件)
+                    <Header.Subheader>
+                      待上传: {uploadQueue.filter(item => item.status === 'pending').length} |
+                      上传中: {uploadQueue.filter(item => item.status === 'uploading').length} |
+                      已完成: {uploadQueue.filter(item => item.status === 'completed').length} |
+                      失败: {uploadQueue.filter(item => item.status === 'error').length}
+                    </Header.Subheader>
+                  </Header.Content>
+                  <Button
+                    size="tiny"
+                    floated="right"
+                    onClick={clearCompleted}
+                    disabled={uploadQueue.filter(item => item.status === 'completed').length === 0}
+                  >
+                    清除已完成
+                  </Button>
+                  <Button
+                    size="tiny"
+                    floated="right"
+                    onClick={clearAll}
+                  >
+                    清空队列
+                  </Button>
+                </Header>
+                <Card.Group itemsPerRow={1} stackable>
+                  {uploadQueue.map((item) => (
+                    <Card key={item.id} color={
+                      item.status === 'completed' ? 'green' :
+                      item.status === 'error' ? 'red' :
+                      item.status === 'uploading' ? 'blue' : 'grey'
+                    }>
+                      <Card.Content>
+                        <Card.Header>
+                          <Icon name={
+                            item.status === 'completed' ? 'check circle' :
+                            item.status === 'error' ? 'times circle' :
+                            item.status === 'uploading' ? 'spinner' : 'clock'
+                          } />
+                          {item.file.name}
+                          {item.status === 'uploading' && <Icon loading name="spinner" />}
+                        </Card.Header>
+                        <Card.Meta>
+                          {(item.file.size / 1024).toFixed(1)} KB
+                        </Card.Meta>
+                        <Card.Description>
+                          {item.status === 'pending' && '等待上传...'}
+                          {item.status === 'uploading' && (
+                            <div>
+                              <Progress percent={item.progress} size="tiny" color="blue" />
+                              正在上传并处理...
+                            </div>
+                          )}
+                          {item.status === 'completed' && (
+                            <div>
+                              <Icon name="check" color="green" /> 上传成功！
+                              <br />
+                              共识别出 {item.results?.length || 0} 道题目
+                              {item.results && item.results.length > 0 && (
+                                <div style={{ marginTop: '0.5rem', fontSize: '0.85em' }}>
+                                  题目ID: {item.results.map(r => r.id.substring(0, 8)).join(', ')}
+                                </div>
+                              )}
+                              {item.error && (
+                                <div style={{ marginTop: '0.5rem', color: 'orange', fontSize: '0.85em' }}>
+                                  部分题目处理失败: {item.error}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          {item.status === 'error' && (
+                            <div>
+                              <Icon name="times" color="red" /> 上传失败
+                              <br />
+                              <span style={{ color: 'red', fontSize: '0.9em' }}>
+                                {item.error}
+                              </span>
+                            </div>
+                          )}
+                        </Card.Description>
+                      </Card.Content>
+                      <Card.Content extra>
+                        <div className="ui two buttons">
+                          {item.status === 'error' && (
+                            <Button basic color="green" onClick={() => retryUpload(item.id)}>
+                              重试
+                            </Button>
+                          )}
+                          {(item.status === 'pending' || item.status === 'completed' || item.status === 'error') && (
+                            <Button basic color="red" onClick={() => removeFromQueue(item.id)}>
+                              移除
+                            </Button>
+                          )}
+                        </div>
+                      </Card.Content>
+                    </Card>
+                  ))}
+                </Card.Group>
+              </Segment>
+            </>
           )}
-          {/* 一键生成答案 */}
+
+          <Header as="h3" style={{ marginTop: '2em' }}>一键生成答案</Header>
           <Segment>
-            <Header as="h3">
-              <Icon name="magic" />
-              <Header.Content>
-                一键生成答案
-                <Header.Subheader>
-                  为所有答案为空的题目自动生成答案（使用glm-4.5模型，开启思考模式）
-                </Header.Subheader>
-              </Header.Content>
-            </Header>
             <Form>
               <Form.Field>
                 <label>模型名称（可选）</label>
@@ -653,18 +644,9 @@ export default function AdminPage() {
                 </Button>
               )}
             </Form>
-            {/* 生成进度日志 */}
             {generateMessages.length > 0 && (
               <div style={{ marginTop: '2em' }}>
-                <Header as="h4">
-                  <Icon name="list ul" />
-                  <Header.Content>
-                    生成进度
-                    <Header.Subheader>
-                      共 {generateMessages.length} 条日志
-                    </Header.Subheader>
-                  </Header.Content>
-                </Header>
+                <Header as="h4">生成进度</Header>
                 <Segment style={{ maxHeight: '400px', overflowY: 'auto' }}>
                   {generateMessages.map((msg, index) => (
                     <Message
@@ -735,7 +717,8 @@ export default function AdminPage() {
               </div>
             )}
           </Segment>
-          {/* 分类和习题集管理 */}
+
+          <Header as="h3" style={{ marginTop: '2em' }}>分类和习题集管理</Header>
           <Segment>
             <CategoryAndCollectionManager onCollectionCreated={handleCollectionCreated} />
           </Segment>
