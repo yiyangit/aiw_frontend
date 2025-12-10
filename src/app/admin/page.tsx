@@ -410,7 +410,6 @@ export default function AdminPage() {
               <Icon name="chart bar" />
               <Header.Content>
                 概览
-                <Header.Subheader>系统核心数据统计</Header.Subheader>
               </Header.Content>
             </Header>
             {statsLoading ? (
@@ -419,14 +418,12 @@ export default function AdminPage() {
               <Statistic.Group widths="two">
                 <Statistic>
                   <Statistic.Value>
-                    <Icon name="users" />
                     {stats?.user_count}
                   </Statistic.Value>
                   <Statistic.Label>用户总数</Statistic.Label>
                 </Statistic>
                 <Statistic>
                   <Statistic.Value>
-                    <Icon name="file alternate" />
                     {stats?.problem_count}
                   </Statistic.Value>
                   <Statistic.Label>题目总数</Statistic.Label>
