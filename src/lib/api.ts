@@ -384,6 +384,20 @@ export async function getCollectionsWithProblems(): Promise<Collection[]> {
   return response.json();
 }
 
+// 根据分类获取习题集（包含题目详情）
+export async function getCollectionsByCategoryWithProblems(categoryId: string): Promise<Collection[]> {
+  const token = getAuthToken();
+  const response = await fetch(`${API_BASE_URL}/api/v1/collections/by-category-with-problems?category_id=${categoryId}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Failed to fetch collections by category');
+  }
+  return response.json();
+}
+
 // 创建习题集
 export async function createCollection(data: {
   name: string;
