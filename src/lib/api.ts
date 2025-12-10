@@ -485,3 +485,18 @@ export async function generateAnswers(model?: string): Promise<ReadableStream> {
 
   return response.body!;
 }
+
+// ================== Admin Statistics API ==================
+
+export async function getStatistics(): Promise<{ user_count: number; problem_count: number }> {
+  const token = getAuthToken();
+  const response = await fetch(`${API_BASE_URL}/api/v1/admin/statistics`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Failed to fetch statistics');
+  }
+  return response.json();
+}
